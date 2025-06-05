@@ -12,11 +12,10 @@ Build a lightweight **speaker-verification** pipeline that decides whether two a
 We use a **3-speaker subset** of Google’s *Speech Commands v0.02* (clean 1 s, 16 kHz WAVs).  
 For each speaker we select several utterances of the keyword **“zero”**:
 
-| Speaker | # Clips | Total Duration |
-|---------|---------|----------------|
-| jackson | 500 | 500 s |
-| nicolas | 500 | 500 s |
-| theo    | 500 | 500 s |
+- **jackson:** 500 clips (~500 seconds)  
+- **nicolas:** 500 clips (~500 seconds)  
+- **theo:** 500 clips (~500 seconds)
+
 
 > Although originally intended for keyword spotting, the dataset is ideal for a controlled proof-of-concept: clips are noise-free, uniformly sampled, and tagged with speaker IDs.
 
@@ -34,16 +33,32 @@ We zero-pad / truncate so every sample fits a fixed tensor size **(40, 11, 1)**,
 ---
 
 ## 4  Model Architecture
-A compact CNN (≈ 84 k parameters) maps MFCC tensors to **128-D embeddings**:
+We use a lightweight Convolutional Neural Network (CNN) to encode MFCCs into 128-dimensional speaker embeddings. The model architecture is as follows:
 
-Input (40×11×1)
-│
-├─ Conv2D 32 @ 3×3 → MaxPool 2×2
-├─ Conv2D 64 @ 3×3 → MaxPool 2×2
-└─ Flatten → Dense(128) ←─ speaker embedding
+Input: MFCC (40 × 11 × 1)
+**Model Architecture Overview:**
+
+- **Input:** MFCC spectrogram of shape **(40 × 11 × 1)**
+- **Conv2D Layer 1:** 32 filters, 3×3 kernel, ReLU activation
+- **MaxPooling Layer 1:** 2×2 pool size
+- **Conv2D Layer 2:** 64 filters, 3×3 kernel, ReLU activation
+- **MaxPooling Layer 2:** 2×2 pool size
+- **Flatten Layer**
+- **Dense Layer:** 128 units, ReLU activation → **Speaker Embedding (128-D)**
 
 
-The embedding layer is trained by appending a soft-max head (3 units) and supervising with speaker IDs; after training we discard the soft-max and keep the embedding network for verification.
+Input Layer: Takes in 40 Mel-frequency cepstral coefficients over 11 time frames.
+
+Convolutional Layers: Two stacked 2D convolutional blocks extract local temporal-frequency features.
+
+Flatten Layer: Converts the 2D feature map into a 1D vector.
+
+Dense Layer: Outputs a compact 128-D embedding that represents the speaker's voiceprint.
+
+This embedding is later used for cosine similarity-based speaker verification.
+
+During training, a softmax classification head (3 units) is appended to the embedding layer and supervised with speaker IDs. Once trained, we discard the softmax head and retain the embedding model for inference.
+
 
 ---
 
@@ -59,14 +74,15 @@ The optimal τ is chosen via the **Equal Error Rate (EER)** point on the ROC cur
 ## 6  Evaluation
 Balanced pair list: 750 “same-speaker” + 750 “different-speaker” pairs (cached embeddings, GPU inference).
 
-| Metric | Score |
-|--------|-------|
-| Accuracy | **0.917** |
-| Precision | **0.917** |
-| Recall | **0.916** |
-| F1-Score | **0.917** |
-| AUC (ROC) | **0.977** |
-| EER | **0.083** at τ = 0.781 |
+
+- **Accuracy:** 0.917
+- **Precision:** 0.917
+- **Recall:** 0.916
+- **F1-score:** 0.917
+- **AUC(ROC):** 0.977
+- **Flatten Layer**
+- **EER:** 0.083 at **τ = 0.781**
+ 
 
 ### Visuals
 * **Confusion matrix** @ EER threshold  
