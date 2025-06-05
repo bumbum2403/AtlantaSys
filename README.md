@@ -5,6 +5,7 @@ Note: Currently, I am working on the second task and will update the Jupyter not
 This README reflects my understanding of the First task so far. Thanks :)
 
 update- I've attempted the second task as well. Project report corresponding to `Task 2` is "TASK2_Report_License_Plate_Recognition" 
+Dataset used in `Task 2: ` `https://www.kaggle.com/datasets/saisirishan/indian-vehicle-dataset` 
 
 
 ---
