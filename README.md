@@ -4,6 +4,8 @@
 Note: Currently, I am working on the second task and will update the Jupyter notebook on the same repository as soon as possible, if not by this evening. I am putting in my best efforts to complete it promptly.
 This README reflects my understanding of the First task so far. Thanks :)
 
+update- I've attempted the second task as well. Project report corresponding to `Task 2` is "TASK2_Report_License_Plate_Recognition" 
+
 
 ---
 
