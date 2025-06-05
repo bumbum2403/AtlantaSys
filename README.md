@@ -22,6 +22,7 @@ For each speaker we select several utterances of the keyword **“zero”**:
 - **nicolas:** 500 clips (~500 seconds)  
 - **theo:** 500 clips (~500 seconds)
 
+LINK: <https://github.com/Jakobovski/free-spoken-digit-dataset> 
 
 > Although originally intended for keyword spotting, the dataset is ideal for a controlled proof-of-concept: clips are noise-free, uniformly sampled, and tagged with speaker IDs.
 
